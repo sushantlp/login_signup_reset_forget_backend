@@ -91,3 +91,36 @@ module.exports.requestLogin = (req, res) => {
     return res.status(400).send("Not a good api call");
   }
 };
+
+// Request Forget Password
+module.exports.requestForgetPassword = (req, res) => {
+  if (req.query.email !== undefined && req.query.email !== "") {
+    // Extract Parameter
+    const email = req.query.email;
+
+    // Logic Login
+    return shareController
+      .logicForgetPassword(email)
+      .then(response => {
+        // Intialize
+        const metadata = { type: email };
+
+        return res
+          .status(200)
+          .send(
+            shareController.createJsonObject(
+              response.msg,
+              "/api/v1/forget",
+              200,
+              response.success,
+              metadata
+            )
+          );
+      })
+      .catch(error => {
+        return res.status(500).send("Oops our bad!!!");
+      });
+  } else {
+    return res.status(400).send("Not a good api call");
+  }
+};

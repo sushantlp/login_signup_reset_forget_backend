@@ -74,6 +74,8 @@ module.exports.logicLogic = async (email, password) => {
   }
 };
 
+// Logic Forget Password
+module.exports.logicForgetPassword = email => {};
 // Create Json Object
 module.exports.createJsonObject = (data, location, code, bool, metadata) => {
   return JSON.stringify({
