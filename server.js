@@ -66,7 +66,10 @@ app.get("/", (req, res) => {
 // Version 1 API
 app.group("/api/v1", router => {
   // User Signup Route
-  router.get("/signup", auth.requestAppSignup);
+  router.get("/signup", auth.requestSignup);
+
+  // User Login Route
+  router.get("/login", auth.requestLogin);
 });
 
 // Call Sequelize Connection
