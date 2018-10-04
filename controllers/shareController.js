@@ -40,7 +40,7 @@ module.exports.logicSignup = async (email, name, password) => {
 };
 
 // Logic Logic
-module.exports.logicLogic = async (email, password) => {
+module.exports.logicLogin = async (email, password) => {
   try {
     // Intialize
     let responsedata = {};
@@ -80,8 +80,6 @@ module.exports.logicForgetPassword = async email => {
   try {
     // Intialize
     let responsedata = {};
-    const link =
-      "http://localhost:8080/api/v1/reset?email=sushantsingh.1081@gmail.com";
 
     // Read User Record
     const userData = await userModel.readUserRecord("*", email, 1);
@@ -93,6 +91,10 @@ module.exports.logicForgetPassword = async email => {
         msg: "User email not found"
       });
     }
+
+    const hash = bcrypt.hashSync(email, saltRounds);
+
+    const link = `http://localhost:8080/api/v1/reset?logic=${hash}`;
 
     // Logic Send Mail
     logicSendMail(email, link);
@@ -138,6 +140,42 @@ const logicSendMail = (email, link) => {
     );
   });
 };
+
+// module.exports.logicForgetPassword = (hash, password) => {
+//   try {
+//     // Intialize
+//     let responsedata = {};
+
+//     const match = await bcrypt.compare(password, userData[0].password);
+
+//     // Read User Record
+//     const userData = await userModel.readUserRecord("*", email, 1);
+
+//     // Check Email Already Exist
+//     if (userData.length <= 0) {
+//       return (responsedata = {
+//         success: false,
+//         msg: "User email not found"
+//       });
+//     }
+
+//     if (match) {
+//       return (responsedata = {
+//         success: true,
+//         msg: "Successful login"
+//       });
+//     } else {
+//       return (responsedata = {
+//         success: false,
+//         msg: "Wrong password"
+//       });
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     return Promise.reject(error);
+//   }
+// };
+
 // Create Json Object
 module.exports.createJsonObject = (data, location, code, bool, metadata) => {
   return JSON.stringify({

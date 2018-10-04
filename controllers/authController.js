@@ -67,7 +67,7 @@ module.exports.requestLogin = (req, res) => {
 
     // Logic Login
     return shareController
-      .logicLogic(email, password)
+      .logicLogin(email, password)
       .then(response => {
         // Intialize
         const metadata = { type: email };
@@ -94,23 +94,29 @@ module.exports.requestLogin = (req, res) => {
 
 // Request Forget Password
 module.exports.requestForgetPassword = (req, res) => {
-  if (req.query.email !== undefined && req.query.email !== "") {
+  if (
+    req.query.logic !== undefined &&
+    req.query.logic !== "" &&
+    req.query.password !== undefined &&
+    req.query.password !== ""
+  ) {
     // Extract Parameter
-    const email = req.query.email;
+    const hash = req.query.logic;
+    const password = req.query.password;
 
     // Logic Login
     return shareController
-      .logicForgetPassword(email)
+      .logicForgetPassword(hash, password)
       .then(response => {
         // Intialize
-        const metadata = { type: email };
+        const metadata = { type: hash };
 
         return res
           .status(200)
           .send(
             shareController.createJsonObject(
               response.msg,
-              "/api/v1/forget",
+              "/api/v1/reset",
               200,
               response.success,
               metadata
