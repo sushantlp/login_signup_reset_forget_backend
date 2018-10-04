@@ -29,6 +29,7 @@ const auth = require("./controllers/authController");
 app.use(morgan("dev"));
 
 // Express configuration.
+app.set("view engine", "ejs");
 app.set("host", process.env.OPENSHIFT_NODEJS_IP || "0.0.0.0");
 app.set("port", process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080);
 
@@ -70,6 +71,12 @@ app.group("/api/v1", router => {
 
   // User Login Route
   router.get("/login", auth.requestLogin);
+
+  // Forget Route
+  router.get("/forget", auth.requestForgetPassword);
+
+  // Forget Route
+  router.get("/reset", auth.requestResetPassword);
 });
 
 // Call Sequelize Connection

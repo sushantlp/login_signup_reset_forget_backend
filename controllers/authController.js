@@ -124,3 +124,35 @@ module.exports.requestForgetPassword = (req, res) => {
     return res.status(400).send("Not a good api call");
   }
 };
+
+module.exports.requestResetPassword = (req, res) => {
+  if (req.query.email !== undefined && req.query.email !== "") {
+    // Extract Parameter
+    const email = req.query.email;
+
+    // // Logic Login
+    // return shareController
+    //   .logicForgetPassword(email)
+    //   .then(response => {
+    // Intialize
+    const metadata = { type: email };
+
+    return res
+      .status(200)
+      .send(
+        shareController.createJsonObject(
+          "Hello",
+          "/api/v1/forget",
+          200,
+          true,
+          metadata
+        )
+      );
+    // })
+    // .catch(error => {
+    //   return res.status(500).send("Oops our bad!!!");
+    // });
+  } else {
+    return res.status(400).send("Not a good api call");
+  }
+};
