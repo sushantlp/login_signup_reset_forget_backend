@@ -155,7 +155,7 @@ module.exports.logicResetPassword = async (hash, password) => {
     let responsedata = {};
 
     // Read Reset Email Hash
-    const reset = await resetEmailHash.readResetEmailHash("*", email, 1);
+    const reset = await resetEmailHash.readResetEmailHash("*", hash, 1);
 
     // Check Reset Already Exist
     if (reset.length <= 0) {
