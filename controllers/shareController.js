@@ -7,6 +7,7 @@ const saltRounds = 10;
 
 // Import Model
 const userModel = require("../models/user");
+const resetEmailHash = require("../models/reset_email_hash");
 
 // Logic Signup
 module.exports.logicSignup = async (email, name, password) => {
@@ -95,6 +96,12 @@ module.exports.logicForgetPassword = async email => {
     const hash = bcrypt.hashSync(email, saltRounds);
 
     const link = `http://localhost:8080/api/v1/reset?logic=${hash}`;
+
+    // Update Reset Email Hash
+    await resetEmailHash.updateResetEmailHash(userData[0].user_id, 0);
+
+    // Keep Reset Email Hash
+    resetEmailHash.keepResetEmailHash(userData[0].user_id, hash, 1);
 
     // Logic Send Mail
     logicSendMail(email, link);
