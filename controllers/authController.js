@@ -92,21 +92,21 @@ module.exports.requestLogin = (req, res) => {
   }
 };
 
-// Request Forget Password
-module.exports.requestForgetPassword = (req, res) => {
+// Request Reset Password
+module.exports.requestResetPassword = (req, res) => {
   if (
-    req.query.logic !== undefined &&
-    req.query.logic !== "" &&
+    req.query.hash !== undefined &&
+    req.query.hash !== "" &&
     req.query.password !== undefined &&
     req.query.password !== ""
   ) {
     // Extract Parameter
-    const hash = req.query.logic;
+    const hash = req.query.hash;
     const password = req.query.password;
 
-    // Logic Login
+    // Logic Reset Password
     return shareController
-      .logicForgetPassword(hash, password)
+      .logicResetPassword(hash, password)
       .then(response => {
         // Intialize
         const metadata = { type: hash };
@@ -131,33 +131,34 @@ module.exports.requestForgetPassword = (req, res) => {
   }
 };
 
-module.exports.requestResetPassword = (req, res) => {
+// Request Forget Password
+module.exports.requestForgetPassword = (req, res) => {
   if (req.query.email !== undefined && req.query.email !== "") {
     // Extract Parameter
     const email = req.query.email;
 
-    // // Logic Login
-    // return shareController
-    //   .logicForgetPassword(email)
-    //   .then(response => {
-    // Intialize
-    const metadata = { type: email };
+    // Logic Forget Password
+    return shareController
+      .logicForgetPassword(email)
+      .then(response => {
+        // Intialize
+        const metadata = { type: email };
 
-    return res
-      .status(200)
-      .send(
-        shareController.createJsonObject(
-          "Hello",
-          "/api/v1/forget",
-          200,
-          true,
-          metadata
-        )
-      );
-    // })
-    // .catch(error => {
-    //   return res.status(500).send("Oops our bad!!!");
-    // });
+        return res
+          .status(200)
+          .send(
+            shareController.createJsonObject(
+              response.msg,
+              "/api/v1/forget",
+              200,
+              response.success,
+              metadata
+            )
+          );
+      })
+      .catch(error => {
+        return res.status(500).send("Oops our bad!!!");
+      });
   } else {
     return res.status(400).send("Not a good api call");
   }

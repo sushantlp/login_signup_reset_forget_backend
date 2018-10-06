@@ -28,7 +28,7 @@ const now = moment()
  */
 
 // Read Reset Email Hash
-module.exports.readResetEmailHash = async (select, userId, status) => {
+module.exports.readResetEmailHash = async (select, hash, status) => {
   try {
     const connection = await mysql.createConnection({
       host: process.env.DB_HOST,
@@ -39,10 +39,10 @@ module.exports.readResetEmailHash = async (select, userId, status) => {
     });
 
     // Query
-    const query = `SELECT ${select} FROM reset_email_hashes WHERE user_id=? AND status=? LIMIT 1`;
+    const query = `SELECT ${select} FROM reset_email_hashes WHERE hash=? AND status=? LIMIT 1`;
 
     // Query Database
-    const [rows, fields] = await connection.execute(query, [userId, status]);
+    const [rows, fields] = await connection.execute(query, [hash, status]);
 
     connection.close();
 
@@ -97,7 +97,7 @@ module.exports.updateResetEmailHash = async (userId, status) => {
 
     // Query
     const query =
-      "UPDATE `sms` SET `status` = ?, `updated_at` = ? WHERE `user_id` = ?";
+      "UPDATE `reset_email_hashes` SET `status` = ?, `updated_at` = ? WHERE `user_id` = ?";
 
     // Query Database
     const row = await connection.execute(query, [status, now, userId]);

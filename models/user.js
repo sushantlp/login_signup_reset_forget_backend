@@ -87,6 +87,32 @@ module.exports.keepUserRecord = async (email, name, password, status) => {
   }
 };
 
+// Update User Password
+module.exports.updateUserPassword = async (userId, password) => {
+  try {
+    const connection = await mysql.createConnection({
+      host: process.env.DB_HOST,
+      user: process.env.DB_USERNAME,
+      port: process.env.DB_PORT,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE
+    });
+
+    // Query
+    const query =
+      "UPDATE `users` SET `password` = ?, `updated_at` = ? WHERE `user_id` = ?";
+
+    // Query Database
+    const row = await connection.execute(query, [password, now, userId]);
+
+    connection.close();
+
+    return row;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 /**
  * End Database Read and Write
  */
