@@ -67,16 +67,16 @@ app.get("/", (req, res) => {
 // Version 1 API
 app.group("/api/v1", router => {
   // User Signup Route
-  router.get("/signup", auth.requestSignup);
+  router.post("/signup", auth.requestSignup);
 
   // User Login Route
-  router.get("/login", auth.requestLogin);
+  router.post("/login", auth.requestLogin);
 
   // Forget Route
-  router.get("/forget", auth.requestForgetPassword);
+  router.post("/forget", auth.requestForgetPassword);
 
   // Forget Route
-  router.get("/reset", auth.requestResetPassword);
+  router.post("/reset", auth.requestResetPassword);
 });
 
 // Call Sequelize Connection

@@ -21,18 +21,28 @@ module.exports.requestSignup = (req, res) => {
     const name = req.query.name;
     const password = req.query.password;
 
+    // Intialize
+    const metadata = { type: email };
+
     // Validate Email
     if (!EMAIL_REG.test(email)) {
-      return res.status(400).send("Email is not valid");
+      return res
+        .status(200)
+        .send(
+          shareController.createJsonObject(
+            "Email is not valid",
+            "/api/v1/signup",
+            200,
+            false,
+            metadata
+          )
+        );
     }
 
     // Logic Signup
     return shareController
       .logicSignup(email, name, password)
       .then(response => {
-        // Intialize
-        const metadata = { type: email };
-
         return res
           .status(200)
           .send(
